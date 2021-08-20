@@ -10,7 +10,7 @@ finalResult <- data.frame()
 
 for (i in 1:nrow(files)){
   data <- read.csv(files$files[i])
-  result <- maxLoad(data)
+  result <- clickPoint(data)
   finalResult <- rbind(finalResult, result)
   readline(prompt="Press [enter] to continue")
 }

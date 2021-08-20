@@ -6,7 +6,7 @@ maxLoad <- function(data){
     plot(data$Extension, data$Load, 
          main = "Select the Crack Point then click 'finish.'",
          pch = 16, cex = 0.1)
-    lines(data$Extension, data$Load, col = 'grey')
+    lines(data$Extension, data$Load$x, col = 'red')
     # crack <- sapply(list(data$Time,data$Load),"[",identify(data$Time,data$Load))
     # crackIndex <- which(crack[1] == data$Time)
     # ExtensionAtCrack = data$Extension[crackIndex]
