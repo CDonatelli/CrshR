@@ -7,7 +7,7 @@
       crack <- sapply(list(data$Time,data$Load),"[",identify(data$Time,data$Load, n=1))
       crackIndex <- which(crack[1] == data$Time)
       ExtensionAtCrack = data$Extension[crackIndex]
-      CrackPropigationExt = ExtensionAtCrack+2
+      loadAtCrack = data$Load[crackIndex]
     
     #Select hold time
       # plot(data$Time, data$Extension, main = "Select hold start, then hold stop, then click 'finish.'")
@@ -36,7 +36,8 @@
       workToMaxLoad <- trapz(dataToMaxLoad$Extension, dataToMaxLoad$Load)
       workToMaxExtension <- trapz(dataToMaxExtension$Extension, dataToMaxExtension$Load)
     
-      results <- data.frame(maxLoad, extensionAtMaxLoad, maxExtension, loadAtMaxExt,
-                            workToCrack, workToMaxLoad, workToMaxExtension)
+      results <- data.frame(maxLoad, extensionAtMaxLoad, workToMaxLoad,
+                            loadAtMaxExt, maxExtension, workToMaxExtension,
+                            loadAtCrack, ExtensionAtCrack, workToCrack)
     return(results)
   }
