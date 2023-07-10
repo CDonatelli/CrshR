@@ -37,6 +37,7 @@ varNames = ["Time", "Load", "Extension"];
 
 for i = 1:length(testIndexEnd)
     individualTestData = realData(testIndexStart(i):testIndexEnd(i),:);
+    individualTestData(any(isnan(individualTestData), 2), :) = [];
     individualTests.("test" + num2str(i)) = individualTestData;
     fileName = fileNamePrefix + "_" + "test" + num2str(i) + ".csv";
     T = array2table(individualTestData,'VariableNames', varNames);
