@@ -9,7 +9,7 @@ files$files<- as.character(files$files)
 finalResult <- data.frame()
 
 ### Change this to equal the span of your 3pt bending rig
-length = 100
+length = 60
 
 for (i in 1:nrow(files)){
   data <- read.csv(files$files[i])
@@ -23,6 +23,6 @@ row.names(finalResult) <- files$files
 
 
 ### Change this to a file name that makes sense
-fileName = "filename.csv"
+fileName = "testDemoThing.csv"
 
 write.csv(finalResult, fileName, row.names = TRUE)

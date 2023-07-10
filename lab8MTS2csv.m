@@ -10,6 +10,7 @@ opts.VariableNames = ["Time", "SlackExt", "Load", "Extension", "Separation"];
 opts.VariableTypes = ["double", "double", "double", "double", "double"];
 % Import the data
 data = readtable("C:\Users\donatell\OneDrive - Chapman University\Research\SplittingHairs\02. Raw Data\Material Testing\Text Files\CRC1714_Ab.txt", opts);
+%data = readtable(fileList(i).name, opts);
 
 % Convert to output type
 data = table2array(data);
