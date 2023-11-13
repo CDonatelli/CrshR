@@ -9,8 +9,8 @@
     cycleList = list()
     #Data Subsets
     for (i in 1:cycles){
-      start = which(userPts[i] == data$Time)
-      end = which(userPts[i+1] == data$Time)
+      start = which.min(abs(data$Time - userPts[i]))
+      end = which.min(abs(data$Time - userPts[i+1]))
       cycleList[[i]] = as.data.frame(assign(paste0("cycle",i), data[c(start:end),]))
     }
     
