@@ -10,13 +10,14 @@ finalResult <- data.frame()
 
 ### Change this to equal the span of your 3pt bending rig
 length = 50
+cycles = 3
 
 data <- read.csv(files$files[1])
-userPts <- getCyclePts(data, 3)
+userPts <- getCyclePts(data, cycles)
 
 for (i in 1:nrow(files)){
   data <- read.csv(files$files[i])
-  result <- bend_3pt_cyclic(data, length, 3, userPts)
+  result <- bend_3pt_cyclic(data, length, cycles, userPts)
   finalResult <- rbind(finalResult, result)
 }
 
