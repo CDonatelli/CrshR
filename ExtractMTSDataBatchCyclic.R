@@ -14,18 +14,35 @@ finalResult <- data.frame()
   # Distance between grippers for torsion
 
 length = 50
-cycles = 3
+cycles = 5
+maxExt = 10
 
+## Lateral: 10
+## Dorsal: 5
 
-### Use this if timing is the same for all trials
+### Use this if timing is the same for all trials ###
 #data <- read.csv(files$files[1])
 #userPts <- getCyclePts(data, cycles)
+### Use this if timing is the same for all trials ###
 
 for (i in 1:nrow(files)){
-  data <- read.csv(files$files[i])
-  ### Use this if timing is different for some trials
-  #userPts <- getCyclePts(data, cycles)
-  result <- bend_3pt_cyclic(data, length, cycles, userPts)
+  ## data <- read.csv(files$files[i]) ## uncomment if your CSV is formatted properlu
+  
+  #### Use if you need to format headers ####
+  data <- read.csv(files$files[i], skip = 3, header = F)
+  colnames(data)<- c("Time","Load")
+  #### Use if you need to format headers ####
+  
+  ### Use this if timing is different for some trials ###
+  dataPts = nrow(data)
+  cycleLength = dataPts/cycles
+  userPts = floor(ppoints(cycles+1,1)*dataPts)
+  userPts[1]=1
+  userPts = data$Time[userPts]
+  ### Use this if timing is different for some trials ###
+  
+  ### Change function here to match the type of data you have
+  result <- bend_3pt_cyclic_MissingData(data, length, cycles, userPts, maxExt)
   finalResult <- rbind(finalResult, result)
 }
 
@@ -34,6 +51,6 @@ row.names(finalResult) <- files$files
 
 
 ### Change this to a file name that makes sense
-fileName = "testDemoThing.csv"
+fileName = "SturgeonBending_Lateral.csv"
 
 write.csv(finalResult, fileName, row.names = TRUE)
