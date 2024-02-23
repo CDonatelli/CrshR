@@ -14,7 +14,7 @@ finalResult <- data.frame()
   # Distance between grippers for torsion
 
 length = 50
-cycles = 5
+cycles = 3
 maxExt = 10
 
 ## Lateral: 10
@@ -30,7 +30,7 @@ for (i in 1:nrow(files)){
   
   #### Use if you need to format headers ####
   data <- read.csv(files$files[i], skip = 3, header = F)
-  colnames(data)<- c("Time","Load")
+  colnames(data)<- c("Time","Load","Angle")
   #### Use if you need to format headers ####
   
   ### Use this if timing is different for some trials ###
@@ -42,7 +42,7 @@ for (i in 1:nrow(files)){
   ### Use this if timing is different for some trials ###
   
   ### Change function here to match the type of data you have
-  result <- bend_3pt_cyclic_MissingData(data, length, cycles, userPts, maxExt)
+  result <- torsion_cyclic_Dana(data, length, cycles, userPts)
   finalResult <- rbind(finalResult, result)
 }
 
@@ -51,6 +51,6 @@ row.names(finalResult) <- files$files
 
 
 ### Change this to a file name that makes sense
-fileName = "SturgeonBending_Lateral.csv"
+fileName = "SturgeonTorsion_CorrForZero.csv"
 
 write.csv(finalResult, fileName, row.names = TRUE)
