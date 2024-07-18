@@ -22,8 +22,8 @@
       # angleAtBreak = data$Angle[breakIndex]
     
     #Select hold time
-      # plot(data$Time, data$Extension, main = "Select hold start, then hold stop, then click 'finish.'")
-      # hold <- sapply(list(data$Time,data$Extension),"[",identify(data$Time,data$Extension))
+      plot(data$Time, data$Extension, main = "Select hold start, then hold stop, then click 'finish.'")
+      hold <- sapply(list(data$Time,data$Extension),"[",identify(data$Time,data$Extension))
       holdStartIndex <- which(userPts[2] == data$Time)
       loadAtHoldStart = data$Load[holdStartIndex]
       

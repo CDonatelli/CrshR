@@ -3,19 +3,17 @@
     #Select break point
     data$Load <- abs(data$Load)
     x11() # for some reason identify wants its own window now
-      plot(data$Time, data$Load, main = "Select the Crack Point then click 'Stop Locator.'")
-      crack <- sapply(list(data$Time,data$Load),"[",identify(data$Time,data$Load, n=1))
-      crackIndex <- which(crack[1] == data$Time)
+      plot(data$Time, data$Load, main = "Select the Crack Point, hold start, hold stop.'")
+      userPts <- sapply(list(data$Time,data$Load),"[",identify(data$Time,data$Load, n=3))
+      crackIndex <- which(userPts[1] == data$Time)
       ExtensionAtCrack = data$Extension[crackIndex]
       loadAtCrack = data$Load[crackIndex]
     
-    #Select hold time
-      # plot(data$Time, data$Extension, main = "Select hold start, then hold stop, then click 'finish.'")
-      # hold <- sapply(list(data$Time,data$Extension),"[",identify(data$Time,data$Extension))
-      # holdStartIndex <- which(hold[1,1] == data$Time)
-      # print(holdStartIndex)
-      # holdEndIndex <- which(hold[2,1] == data$Time)
-      # print(holdEndIndex)
+    #Hold Points
+      holdStartIndex <- which(userPts[2] == data$Time)
+      loadAtHoldStart = data$Load[holdStartIndex]
+      holdEndIndex <- which(userPts[3] == data$Time)
+      loadAtHoldEnd = data$Load[holdEndIndex]
     
     #Find Max Values
       maxLoadIndex <- which.max(data$Load)
@@ -38,6 +36,7 @@
     
       results <- data.frame(maxLoad, extensionAtMaxLoad, workToMaxLoad,
                             loadAtMaxExt, maxExtension, workToMaxExtension,
-                            loadAtCrack, ExtensionAtCrack, workToCrack)
+                            loadAtCrack, ExtensionAtCrack, workToCrack,
+                            loadAtHoldStart, loadAtHoldEnd)
     return(results)
   }
