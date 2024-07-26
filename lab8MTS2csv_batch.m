@@ -7,9 +7,11 @@ for i = 1:length(fileList)
     opts = delimitedTextImportOptions("NumVariables", 5);
 
     % Specify read paramaters
-    opts.DataLines = [18, Inf];
+    %opts.DataLines = [18, Inf];
+    opts.DataLines = [8, Inf];
     opts.Delimiter = ",";
-    opts.VariableNames = ["Time", "SlackExt", "Load", "Extension", "Separation"];
+    %opts.VariableNames = ["Time", "SlackExt", "Load", "Extension", "Separation"];
+    opts.VariableNames = ["Load", "Time", "Extension", "Stress", "Strain"];
     opts.VariableTypes = ["double", "double", "double", "double", "double"];
     % Import the data
     %data = readtable("C:\Users\donatell\OneDrive - Chapman University\Research\SplittingHairs\02. Raw Data\Material Testing\Text Files\CRC1714_Ab.txt", opts);
@@ -20,7 +22,8 @@ for i = 1:length(fileList)
 
     clear opts
     %%
-    realData = data(:,[1,3,4]);
+    %realData = data(:,[1,3,4]);
+    realData = data;
 
     %%
     numTests = ~isnan(realData(:,1));
@@ -36,7 +39,8 @@ for i = 1:length(fileList)
 
     fileNamePrefix = fileList(i).name(1:end-4);
 
-    varNames = ["Time", "Load", "Extension"];
+    %varNames = ["Time", "Load", "Extension"];
+    varNames = ["Load", "Time", "Extension", "Stress","Strain"];
     %%
 
     for i = 1:length(testIndexEnd)
