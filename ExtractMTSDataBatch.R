@@ -1,6 +1,10 @@
 library(readr)
 library(ggplot2)
 library(pracma)
+library(segmented)
+
+### Change this to the directory where you have your data files
+setwd("G:/My Drive/Research/00. FishLab/04. Project Folders/FHL Summer 2025/09. Personal Folders/Brody - Buckling/02. Data/MTS Data/Individual Data Files")
 
 #Read in files
 files <- as.data.frame(dir(pattern = ".csv", full.names = TRUE, ignore.case = TRUE))
@@ -9,15 +13,16 @@ files$files<- as.character(files$files)
 finalResult <- data.frame()
 
 ### Change this to equal the span of your 3pt bending rig (mm)
-length = 50
+#length = 50
 
 ### Change this to get values at a specific displacement and load
-setDisp = 15
-setLoad = 50
+setDisp = 5
+setLoad = 3
+cycles = 3
 
 for (i in 1:nrow(files)){
   #data <- read.csv(files$files[i])
-  data <- read_csv(files$files[i], skip = 6)
+  data <- read_csv(files$files[i])
   data = data[-1,]
   result <- bend_3pt(data, length, setDisp, setLoad)
   finalResult <- rbind(finalResult, result)
