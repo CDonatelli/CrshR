@@ -1,4 +1,4 @@
-crush_cyclic2 <- function(data, cycles, setDisp, setLoad){
+crush_cyclic2 <- function(data, cycles, setDisp, setLoad, name){
     data$Load <- abs(data$Load)
     n <- nrow(data)
   
@@ -18,7 +18,8 @@ crush_cyclic2 <- function(data, cycles, setDisp, setLoad){
     seg_fit <- segmented(lm1, seg.Z = ~Extension, psi = list(Extension = initial_psi))
   
     # Plot for visual check
-      plot(cycle1Loading$Extension, cycle1Loading$Load, type = "l")
+      plot(cycle1Loading$Extension, cycle1Loading$Load, type = "l", 
+           main = name)
       plot(seg_fit, add = TRUE, col = "blue", lwd = 2)
       readline(prompt = "Press [Enter] to continue...")
     
