@@ -13,25 +13,33 @@ crush_cyclic2 <- function(data, cycles, setDisp, setLoad, name){
     cycle1Loading <- split_data2[[1]]
     
     plot(cycle1Loading$Extension, cycle1Loading$Load, type = "l", main = name)
-    userPts <- sapply(list(data$Time,data$Load),"[",identify(data$Time,data$Load, n=1))
-    startIndex <- which(userPts[1] == data$Time)
-    cycle1LoadingSub = cycle1Loading[startIndex:nrow(cycle1Loading), ]
+    userPts <- sapply(list(cycle1Loading$Extension, cycle1Loading$Load),"[",
+                  identify(cycle1Loading$Extension, cycle1Loading$Load, n=2))
+    startIndex <- which(userPts[1] == cycle1Loading$Extension)
+    endIndex <- which(userPts[2] == cycle1Loading$Extension)
+    cycle1LoadingSub = cycle1Loading[startIndex:endIndex, ]
     
     lm1 <- lm(Load ~ Extension, data = cycle1LoadingSub)
-    n3 <- floor(nrow(cycle1LoadingSub) / 5)
-    initial_psi <- cycle1LoadingSub$Extension[c(n3, 2*n3, 3*n3, 4*n3)]
-    seg_fit <- segmented(lm1, seg.Z = ~Extension, psi = list(Extension = initial_psi))
+    abline(lm1, col = "blue", lwd = 2)
+    # n3 <- floor(nrow(cycle1LoadingSub) / 5)
+    # initial_psi <- cycle1LoadingSub$Extension[c(n3, 2*n3, 3*n3, 4*n3)]
+    # seg_fit <- segmented(lm1, seg.Z = ~Extension, psi = list(Extension = initial_psi))
   
     # Plot for visual check
-      plot(seg_fit, add = TRUE, col = "blue", lwd = 2)
+      # plot(seg_fit, add = TRUE, col = "blue", lwd = 2)
       readline(prompt = "Press [Enter] to continue...")
     
     # Extract linear region data
-      linearRegionSlope <- slope(seg_fit)$Extension["slope1", "Est."]
-      bpExtension <- seg_fit$psi[1,"Est."]
-      bp_index <- which.min(abs(cycle1Loading$Extension - bpExtension))
-      linearRegionExt <- cycle1Loading$Extension[bp_index]
-      linearRegionLoad <- cycle1Loading$Load[bp_index]
+      # linearRegionSlope <- slope(seg_fit)$Extension["slope1", "Est."]
+      # bpExtension <- seg_fit$psi[1,"Est."]
+      # bp_index <- which.min(abs(cycle1Loading$Extension - bpExtension))
+      # linearRegionExt <- cycle1Loading$Extension[bp_index]
+      # linearRegionLoad <- cycle1Loading$Load[bp_index]
+      linearRegionSlope <- lm1$coefficients[2]
+      bpExtension <- cycle1Loading$Extension[endIndex]
+      # bp_index <- which.min(abs(cycle1Loading$Extension - bpExtension))
+      linearRegionExt <- cycle1Loading$Extension[endIndex]
+      linearRegionLoad <- cycle1Loading$Load[endIndex]
   
   # --- Cycle calculaitons ---
     cycleSummary <- data.frame(
