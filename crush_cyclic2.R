@@ -1,5 +1,5 @@
 crush_cyclic2 <- function(data, cycles, setDisp, setLoad, name){
-    data$Load <- abs(data$Load)
+    #data$Load <- abs(data$Load)
     n <- nrow(data)
   
   # --- Split data into N cycles ---
@@ -12,14 +12,17 @@ crush_cyclic2 <- function(data, cycles, setDisp, setLoad, name){
     split_data2 <- split(cycle1, cut(1:n2, breaks = 2, labels = FALSE))
     cycle1Loading <- split_data2[[1]]
     
-    lm1 <- lm(Load ~ Extension, data = cycle1Loading)
-    n3 <- floor(nrow(cycle1Loading) / 3)
-    initial_psi <- cycle1Loading$Extension[c(n3, 2 * n3)]
+    plot(cycle1Loading$Extension, cycle1Loading$Load, type = "l", main = name)
+    userPts <- sapply(list(data$Time,data$Load),"[",identify(data$Time,data$Load, n=1))
+    startIndex <- which(userPts[1] == data$Time)
+    cycle1LoadingSub = cycle1Loading[startIndex:nrow(cycle1Loading), ]
+    
+    lm1 <- lm(Load ~ Extension, data = cycle1LoadingSub)
+    n3 <- floor(nrow(cycle1LoadingSub) / 5)
+    initial_psi <- cycle1LoadingSub$Extension[c(n3, 2*n3, 3*n3, 4*n3)]
     seg_fit <- segmented(lm1, seg.Z = ~Extension, psi = list(Extension = initial_psi))
   
     # Plot for visual check
-      plot(cycle1Loading$Extension, cycle1Loading$Load, type = "l", 
-           main = name)
       plot(seg_fit, add = TRUE, col = "blue", lwd = 2)
       readline(prompt = "Press [Enter] to continue...")
     

@@ -24,7 +24,7 @@ for (i in 1:nrow(files)){
   #data <- read.csv(files$files[i])
   data <- read_csv(files$files[i])
   name = files$files[i]
-  data = data[-1,]
+  #data = data[-1,]
   result <- crush_cyclic2(data, cycles, setDisp, setLoad, name)
   finalResult <- rbind(finalResult, result)
   #readline(prompt="Press [enter] to continue")
