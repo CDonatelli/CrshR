@@ -3,8 +3,18 @@ crush_cyclic2 <- function(data, cycles, setDisp, setLoad, name){
     n <- nrow(data)
   
   # --- Split data into N cycles ---
-    split_data <- split(data, cut(1:n, breaks = cycles, labels = FALSE))
-    cycleList <- lapply(split_data, as.data.frame)
+    plot(data$Time, data$Load, type = "l", main = "Click start, valleys, and end")
+    valleyIndices <- identify(data$Time, data$Load, n = cycles + 1)
+    valleyIndices <- sort(valleyIndices)  # sort ascending
+    cycleList <- Map(function(start, end) data[start:end, ], valleyIndices[-length(valleyIndices)], valleyIndices[-1])
+    
+    #cycle1 = data[1:which(userPts[2] == data$Time), ]
+    #cycle2 = data[which(userPts[2] == data$Time):which(userPts[3] == data$Time), ]
+    #cycle3 = data[which(userPts[3] == data$Time):n, ]
+    
+    #split_data <- split(data, cut(1:n, breaks = cycles, labels = FALSE))
+    #cycleList <- lapply(splitData, as.data.frame)
+    #cycleList <- list(cycle1, cycle2, cycle3)
   
   # --- Determine linear region from loading portion of the first cycle ---
     cycle1 <- cycleList[[1]]
@@ -73,16 +83,18 @@ crush_cyclic2 <- function(data, cycles, setDisp, setLoad, name){
     
     extAtSetDisp <- cycle1Loading$Extension[setDispIndex]
     loadAtSetDisp <- cycle1Loading$Load[setDispIndex]
-    work2SetDisp <- trapz(cycle1Loading[1:setDispIndex, "Extension"], cycle1Loading[1:setDispIndex, "Load"])
+    data2setDisp <- cycle1Loading[1:setDispIndex,]
+    work2SetDisp <- trapz(data2setDisp$Extension, data2setDisp$Load)
     
     extAtSetLoad <- cycle1Loading$Extension[setLoadIndex]
     loadAtSetLoad <- cycle1Loading$Load[setLoadIndex]
-    work2SetLoad <- trapz(cycle1Loading[1:setLoadIndex, "Extension"], cycle1Loading[1:setLoadIndex, "Load"])
+    data2setLoad <- cycle1Loading[1:setLoadIndex,]
+    work2SetLoad <- trapz(data2setLoad$Extension, data2setLoad$Load)    
     
   # --- Combine all results into one data frame ---
-    cycle_values <- as.vector(t(cycleSummary))
-    cycle_names <- outer(paste0("cycle", 1:cycles),names(cycleSummary), paste, sep = "_")
-    colnames_flat <- as.vector(cycle_names)
+    cycle_names <- as.vector(outer(paste0("cycle", 1:cycles), names(cycleSummary), paste, sep = "_"))
+    cycle_values <- unlist(cycleSummary)
+    names(cycle_values) <- cycle_names
     
     # --- Create final single-row data frame ---
     results <- data.frame(
@@ -99,7 +111,7 @@ crush_cyclic2 <- function(data, cycles, setDisp, setLoad, name){
     )
     
     # Bind cycle values
-    results <- cbind(results, setNames(as.data.frame(t(cycle_values)), colnames_flat))
+    results <- cbind(results, as.data.frame(as.list(cycle_values)))
   
   return(results)
 }
