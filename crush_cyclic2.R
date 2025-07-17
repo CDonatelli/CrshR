@@ -4,9 +4,11 @@ crush_cyclic2 <- function(data, cycles, setDisp, setLoad, name){
   
   # --- Split data into N cycles ---
     plot(data$Time, data$Load, type = "l", main = "Click start, valleys, and end")
-    valleyIndices <- identify(data$Time, data$Load, n = cycles + 1)
-    valleyIndices <- sort(valleyIndices)  # sort ascending
-    cycleList <- Map(function(start, end) data[start:end, ], valleyIndices[-length(valleyIndices)], valleyIndices[-1])
+    internalValleys <- identify(data$Time, data$Load, n = cycles - 1)
+    valleyIndices <- sort(c(1, internalValleys, nrow(data)))
+    cycleList <- Map(function(start, end) data[start:end, ],
+                     valleyIndices[-length(valleyIndices)],
+                     valleyIndices[-1])
     
     #cycle1 = data[1:which(userPts[2] == data$Time), ]
     #cycle2 = data[which(userPts[2] == data$Time):which(userPts[3] == data$Time), ]
