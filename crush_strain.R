@@ -33,19 +33,23 @@ crush_strain <- function(data, cycles, setDisp, setLoad, name){
     #startIndex <- which(userPts[1] == cycle1Loading$Extension)
     #endIndex <- which(userPts[2] == cycle1Loading$Extension)
     
+    two <- which.min(abs(cycle1Loading$Extension - (0.02*user_input)))
     five <- which.min(abs(cycle1Loading$Extension - (0.05*user_input)))
     ten <- which.min(abs(cycle1Loading$Extension - (0.1*user_input)))
     
+    cycle1LoadingSub0 = cycle1Loading[1:two, ]
     cycle1LoadingSub1 = cycle1Loading[1:five, ]
     cycle1LoadingSub2 = cycle1Loading[1:ten, ]
     
     plot(cycle1LoadingSub2$Extension, cycle1LoadingSub2$Load, type = "l", main = name)
     
+    lm0 <- lm(Load ~ Extension, data = cycle1LoadingSub0)
     lm1 <- lm(Load ~ Extension, data = cycle1LoadingSub1)
     lm2 <- lm(Load ~ Extension, data = cycle1LoadingSub2)
     abline(lm1, col = "blue", lwd = 2)
     abline(lm2, col = "purple", lwd = 2)
     
+    Qlm0 <- lm(Load ~ Extension + I(Extension^2), data = cycle1LoadingSub0)
     Qlm1 <- lm(Load ~ Extension + I(Extension^2), data = cycle1LoadingSub1)
     Qlm2 <- lm(Load ~ Extension + I(Extension^2), data = cycle1LoadingSub2)
     #############
@@ -139,10 +143,15 @@ crush_strain <- function(data, cycles, setDisp, setLoad, name){
       loadAtSetLoad = loadAtSetLoad,
       work2SetLoad = work2SetLoad,
       
+      lm0C1 = lm0$coefficients[1],
+      lm0C2 = lm0$coefficients[2],
       lm1C1 = lm1$coefficients[1],
       lm1C2 = lm1$coefficients[2],
       lm2C1 = lm2$coefficients[1],
       lm2C2 = lm2$coefficients[2],
+      Qlm0C1 = Qlm0$coefficients[1],
+      Qlm0C2 = Qlm0$coefficients[2],
+      Qlm0C3 = Qlm0$coefficients[3],
       Qlm1C1 = Qlm1$coefficients[1],
       Qlm1C2 = Qlm1$coefficients[2],
       Qlm1C3 = Qlm1$coefficients[3],
@@ -150,12 +159,15 @@ crush_strain <- function(data, cycles, setDisp, setLoad, name){
       Qlm2C2 = Qlm2$coefficients[2],
       Qlm2C3 = Qlm2$coefficients[3],
       
+      load2 = cycle1$Load[two],
       load5 = cycle1$Load[five],
       load10 = cycle1$Load[ten],
       
+      ext2 = cycle1$Extension[two],
       ext5 = cycle1$Extension[five],
       ext10 = cycle1$Extension[ten],
       
+      work2 = trapz(cycle1LoadingSub0$Extension, cycle1LoadingSub0$Load),
       work5 = trapz(cycle1LoadingSub1$Extension, cycle1LoadingSub1$Load),
       work10 = trapz(cycle1LoadingSub2$Extension, cycle1LoadingSub2$Load)
       
